@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 상세</title>
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+    <div th:replace="~{nav.html::navbar}"></div>
+
+    <div class="detail">
+        <h4>상세페이지</h4>
+        <img src="https://placehold.co/300">
+        <h4 th:text="${item.name}">item.name</h4>
+        <p th:text="${item.price + '원'}">item.price</p>
+    </div>
+
+    <form id="commentForm" action="/comment" method="POST">
+        <input type="hidden" name="itemId" th:value="${item.id}">
+        <input type="text" name="comment" id="commentInput">
+        <button type="submit">댓글 작성</button>
+    </form>
+
+    <!-- 댓글 목록 -->
+    <div id="commentsSection" class="comments">
+        <h4>댓글 목록</h4>
+        <ul id="commentsList">
+            <!-- 댓글이 동적으로 여기에 추가됩니다. -->
+        </ul>
+        <div id="pagination">
+            <!-- 페이지네이션 버튼 -->
+        </div>
+    </div>
+
+    <script>
+        const itemId = [[${item.id}]]; // Thymeleaf placeholder
+        const commentsSection = document.getElementById('commentsSection');
+        const commentsList = document.getElementById('commentsList');
+        const paginationDiv = document.getElementById('pagination');
+        const commentForm = document.getElementById('commentForm');
+
+        // Fetch and render comments
+        async function fetchComments(page = 0, size = 10) {
+            try {
+                const response = await fetch(`/comment/${itemId}?page=${page}&size=${size}`);
+                const data = await response.json();
+
+                // Clear existing comments
+                commentsList.innerHTML = '';
+                paginationDiv.innerHTML = '';
+
+                if (data.content.length === 0) {
+                    commentsList.innerHTML = '<li>댓글이 없습니다. 첫 댓글을 작성해보세요!</li>';
+                    return;
+                }
+
+                // Render comments
+                data.content.forEach(comment => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <p>${comment.comment}</p>
+                        <small>작성자: ${comment.username}</small>
+                    `;
+                    commentsList.appendChild(li);
+                });
+
+                // Render pagination
+                if (data.totalPages > 1) {
+                    if (data.number > 0) {
+                        const prevButton = document.createElement('button');
+                        prevButton.textContent = '이전';
+                        prevButton.onclick = () => fetchComments(data.number - 1, size);
+                        paginationDiv.appendChild(prevButton);
+                    }
+
+                    const pageInfo = document.createElement('span');
+                    pageInfo.textContent = `페이지 ${data.number + 1} / ${data.totalPages}`;
+                    paginationDiv.appendChild(pageInfo);
+
+                    if (data.number < data.totalPages - 1) {
+                        const nextButton = document.createElement('button');
+                        nextButton.textContent = '다음';
+                        nextButton.onclick = () => fetchComments(data.number + 1, size);
+                        paginationDiv.appendChild(nextButton);
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to fetch comments:', error);
+            }
+        }
+
+        // Handle form submission
+        commentForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(commentForm);
+
+            try {
+                const response = await fetch(commentForm.action, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    document.getElementById('commentInput').value = '';
+                    fetchComments(); // Refresh comments
+                } else {
+                    console.error('Failed to submit comment:', await response.text());
+                }
+            } catch (error) {
+                console.error('Failed to submit comment:', error);
+            }
+        });
+
+        // Initial fetch
+        fetchComments();
+    </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 목록</title>
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+    <div th:replace="~{nav.html::navbar}"></div>
+
+    <div th:if="${isEmpty}">
+        <p class="no-results">검색 결과가 없습니다.</p>
+    </div>
+
+    <div th:unless="${isEmpty}">
+        <div class="card" th:each="i : ${items}">
+<!--            <img th:src="${i.imageUrl}" alt="상품 이미지">-->
+            <img th:src="${i.imageURL != null ? i.imageURL : 'https://placehold.co/300'}" alt="상품 이미지">
+            <div>
+                <h4 th:text="${i.name}">item.name</h4>
+                <p th:text="${i.price}">item.price</p>
+            </div>
+            <a th:href="@{'/detail/' + ${i.id}}">상세 링크</a>
+            <a th:href="@{'/edit/' + ${i.id}}">✏️ 수정</a>
+            <span class="delete-btn" th:attr="data-id=${i.id}">🗑️ 삭제</span>
+        </div>
+    </div>
+
+    <div class="pagination-container">
+        <ul class="pagination">
+            <li th:if="${currentPage > 0}">
+                <a th:href="@{'/list?page=' + ${currentPage - 1}}" class="prev">« Prev</a>
+            </li>
+            <li th:each="p : ${#numbers.sequence(0, totalPages - 1)}">
+                <a th:href="@{'/list?page=' + ${p}}"
+                   th:text="${p + 1}"
+                   th:classappend="${p == currentPage} ? 'active' : ''">
+                </a>
+            </li>
+            <li th:if="${currentPage < totalPages - 1}">
+                <a th:href="@{'/list?page=' + ${currentPage + 1}}" class="next">Next »</a>
+            </li>
+        </ul>
+    </div>
+
+<script>
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const itemId = button.getAttribute('data-id');
+            if (confirm('삭제하시겠습니까?')) {
+                fetch(`/delete/${itemId}`, {
+                    method: 'DELETE',
+                })
+                    .then(res => {
+                        if (res.ok) {
+                            location.reload();
+                        } else {
+                            alert('삭제에 실패했습니다.');
+                        }
+                    })
+                    .catch(err => console.error('Error:', err));
+            }
+        });
+    });
+</script>
+</body>
+</html>

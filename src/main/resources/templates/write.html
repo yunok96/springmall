@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 입력</title>
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+    <div th:replace="~{nav.html::navbar}"></div>
+
+    <form id="itemForm" action="/save" method="post">
+        <input type="text" name="name" placeholder="상품명">
+        <input type="number" name="price" placeholder="가격">
+        <input type="file" name="filename" id="fileInput" placeholder="상품 이미지">
+
+<!--        <input type="textarea" name="description" placeholder="상품 내용">-->
+
+        <button type="submit">등록</button>
+    </form>
+
+    <script>
+        document.getElementById("itemForm").addEventListener("submit", async (event) => {
+            event.preventDefault();  // 기본 제출 막기
+
+            var priceInput = document.querySelector("input[name='price']");
+            var priceValue = priceInput.value;
+
+            // 가격이 숫자가 아닌 경우 또는 음수인 경우
+            if (isNaN(priceValue) || priceValue <= 0) {
+                alert("가격은 숫자여야 하며, 0보다 커야 합니다.");
+                priceInput.focus();  // 가격 입력란에 포커스를 맞춤
+                return;  // 가격이 유효하지 않으면 폼 제출을 하지 않음
+            }
+
+            const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0];
+            console.log(file)
+            let presignedUrl = null;
+
+            // 파일이 존재하면 presigned URL을 비동기적으로 요청하여 파일 업로드
+            if (file) {
+                try {
+                    // 서버에서 presigned URL 요청
+                    let name = encodeURIComponent(file.name);
+                    const response = await fetch('/presigned-url?filename='+name, {
+                        method: 'GET',
+                    });
+                    presignedUrl = await response.text();
+
+                    // presigned URL로 파일 업로드
+                    const uploadResponse = await fetch(presignedUrl, {
+                        method: 'PUT',
+                        body: file,
+                    });
+
+                    if (!uploadResponse.ok) {
+                        throw new Error("파일 업로드 실패");
+                    }
+                } catch (error) {
+                    console.error("파일 업로드 중 오류 발생:", error);
+                    alert("파일 업로드에 실패했습니다.");
+                    return;  // 파일 업로드가 실패하면 폼 제출을 하지 않음
+                }
+            }
+
+            // 상품 정보를 서버에 전송
+            const formData = new FormData();
+            formData.append("name", document.querySelector("input[name='name']").value);
+            formData.append("price", document.querySelector("input[name='price']").value);
+            if (presignedUrl) {
+                // 파일 업로드가 완료되면 presigned URL을 서버로 전송
+                presignedUrl = presignedUrl.split("?")[0];  // 쿼리스트링 제거
+                formData.append("fileURL", presignedUrl);
+            }
+
+            // 폼 데이터 제출
+            try {
+                const saveResponse = await fetch("/save", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (saveResponse.ok) {
+                    window.location.href = "/list";  // 상품 목록 페이지로 리다이렉트
+                } else {
+                    alert("상품 등록에 실패했습니다.");
+                }
+            } catch (error) {
+                console.error("상품 등록 중 오류 발생:", error);
+                alert("상품 등록에 실패했습니다.");
+            }
+        });
+    </script>
+</body>
+</html>

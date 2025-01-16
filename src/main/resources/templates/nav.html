@@ -1,0 +1,10 @@
+<div class="nav" th:fragment="navbar">
+    <a href="/" class="logo">SpringMall</a>
+    <a href="/list">List</a>
+    <a href="/write">Write</a>
+
+    <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/myPage}">MyPage</a>
+    <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/logout}">Logout</a>
+
+    <a th:if="${#authorization.expression('!isAuthenticated()')}" th:href="@{/login}">Login</a>
+</div>

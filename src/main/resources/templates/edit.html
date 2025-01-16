@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 상세</title>
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+    <div th:replace="~{nav.html::navbar}"></div>
+
+    <div class="detail">
+        <h4>상세페이지</h4>
+        <form action="/editing" method="post">
+            <img src="https://placehold.co/300">
+            <button type="button">이미지 변경</button>
+
+            <input type="hidden" name="id" th:value="${item.id}">
+            <input name="name" th:value="${item.name}">
+            <input name="price" th:value="${item.price}">
+
+            <button type="submit">수정</button>
+        </form>
+
+    </div>
+
+    <script>
+        document.querySelector("form").addEventListener("submit", function(event) {
+            var priceInput = document.querySelector("input[name='price']");
+            var priceValue = priceInput.value;
+
+            // 가격이 숫자가 아닌 경우 또는 음수인 경우
+            if (isNaN(priceValue) || priceValue <= 0) {
+                event.preventDefault();  // 폼 제출을 막음
+                alert("가격은 숫자여야 하며, 0보다 커야 합니다.");
+                priceInput.focus();  // 가격 입력란에 포커스를 맞춤
+            }
+        });
+    </script>
+</body>
+</html>

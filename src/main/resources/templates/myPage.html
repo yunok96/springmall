@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+    <div th:replace="~{nav.html::navbar}"></div>
+
+    <h4>마이페이지</h4>
+
+    <span sec:authentication="principal"></span>
+    <span sec:authentication="principal.username"></span>
+    <span sec:authentication="principal.authorities"></span>
+    <span sec:authorize="hasAuthority('일반 유저')">특정권한이 있으면 보여주쇼</span>
+    <div sec:authorize="isAuthenticated()">
+        로그인된 사람만 보여주쇼
+    </div>
+
+</body>
+</html>

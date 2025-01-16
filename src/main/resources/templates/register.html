@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>사용자 등록</title>
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+    <div th:replace="~{nav.html::navbar}"></div>
+
+    <form action="/addMember" method="post">
+        <input name="username" placeholder="아이디">
+        <input name="password" placeholder="비밀번호">
+        <input name="displayName" placeholder="이름">
+        <button type="submit">등록</button>
+    </form>
+
+    <script>
+        document.querySelector("form").addEventListener("submit", function(event) {
+            var priceInput = document.querySelector("input[name='price']");
+            var priceValue = priceInput.value;
+
+            // 가격이 숫자가 아닌 경우 또는 음수인 경우
+            if (isNaN(priceValue) || priceValue <= 0) {
+                event.preventDefault();  // 폼 제출을 막음
+                alert("가격은 숫자여야 하며, 0보다 커야 합니다.");
+                priceInput.focus();  // 가격 입력란에 포커스를 맞춤
+            }
+        });
+    </script>
+</body>
+</html>
