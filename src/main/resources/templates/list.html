@@ -8,6 +8,11 @@
 <body>
     <div th:replace="~{nav.html::navbar}"></div>
 
+    <form action="/search" method="POST">
+        <input type="text" name="keyword" th:value="${keyword}">
+        <button type="submit">검색</button>
+    </form>
+
     <div th:if="${isEmpty}">
         <p class="no-results">검색 결과가 없습니다.</p>
     </div>

@@ -21,6 +21,10 @@ public class ItemService {
         return itemRepository.findPageBy(PageRequest.of(page, pageSize));
     }
 
+    public Page<Item> searchItem(String title, int page, int pageSize) {
+        return itemRepository.searchPageByTitle(title, PageRequest.of(page, pageSize));
+    }
+
     public Optional<Item> getItem(int id) {
         return itemRepository.findById(id);
     }

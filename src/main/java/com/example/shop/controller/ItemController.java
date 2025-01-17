@@ -37,6 +37,16 @@ public class ItemController {
         return "list.html"; // list.html 렌더링
     }
 
+    @GetMapping("/search")
+    public String itemSearch(@RequestParam(defaultValue = "0") int page
+                           , @RequestParam(name = "keyword") String keyword
+                           , Model model) {
+        Page<Item> result = itemService.searchItem(keyword, page, pageSize);
+        model.addAttribute("items", result);
+
+        return "list.html";
+    }
+
     @GetMapping("/write")
     public String write() {
         return "write.html";
