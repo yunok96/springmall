@@ -35,18 +35,18 @@
         <ul class="pagination">
             <!-- 이전 버튼 -->
             <li th:if="${currentPage > 1}">
-                <a th:href="@{'/list?page=' + ${currentPage - 1}}" class="prev">« Prev</a>
+                <a th:href="@{'/search?page=' + ${currentPage - 1} + '&keyword=' + ${keyword}}" class="prev">« Prev</a>
             </li>
             <!-- 페이지 번호 -->
             <li th:each="p : ${#numbers.sequence(1, totalPages)}">
-                <a th:href="@{'/list?page=' + ${p}}"
+                <a th:href="@{'/search?page=' + ${p} + '&keyword=' + ${keyword}}"
                    th:text="${p}"
                    th:classappend="${p == currentPage} ? 'active' : ''">
                 </a>
             </li>
             <!-- 다음 버튼 -->
             <li th:if="${currentPage < totalPages}">
-                <a th:href="@{'/list?page=' + ${currentPage + 1}}" class="next">Next »</a>
+                <a th:href="@{'/search?page=' + ${currentPage + 1} + '&keyword=' + ${keyword}}" class="next">Next »</a>
             </li>
         </ul>
     </div>

@@ -23,12 +23,14 @@ public class ItemController {
 
     private final ItemService itemService;
     private final S3Service s3Service;
-    private final CommentService commentService;
+//    private final CommentService commentService;
     private static final int pageSize = 5; // 한 페이지에 표시할 항목 수
 
     @GetMapping("/list")
-    public String getListPage(@RequestParam(defaultValue = "0") int page, Model model) {
-        Page<Item> result = itemService.getItemPage(page, pageSize);
+    public String getListPage(@RequestParam(defaultValue = "1") int page, Model model) {
+        int adjustedPage = page - 1; // 페이지는 0부터 시작하므로 -1 처리
+        Page<Item> result = itemService.getItemPage(adjustedPage, pageSize);
+
         model.addAttribute("items", result.getContent()); // 현재 페이지의 데이터
         model.addAttribute("currentPage", page); // 현재 페이지 번호
         model.addAttribute("totalPages", result.getTotalPages()); // 전체 페이지 수
@@ -38,13 +40,18 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public String itemSearch(@RequestParam(defaultValue = "0") int page
+    public String itemSearch(@RequestParam(defaultValue = "1") int page
                            , @RequestParam(name = "keyword") String keyword
                            , Model model) {
-        Page<Item> result = itemService.searchItem(keyword, page, pageSize);
+        int adjustedPage = page - 1; // 페이지는 0부터 시작하므로 -1 처리
+        Page<Item> result = itemService.searchItem(keyword, adjustedPage, pageSize);
         model.addAttribute("items", result);
+        model.addAttribute("currentPage", page); // 현재 페이지 번호
+        model.addAttribute("totalPages", result.getTotalPages()); // 전체 페이지 수
+        model.addAttribute("isEmpty", result.isEmpty()); // 결과가 없는지 확인
+        model.addAttribute("keyword", keyword); // 검색어를 모델에 추가
 
-        return "list.html";
+        return "search.html";
     }
 
     @GetMapping("/write")
