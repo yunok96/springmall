@@ -29,7 +29,9 @@ public class MemberController {
     }
 
     @PostMapping("/addMember")
-    public String addMember(@RequestParam(name = "username") String username, @RequestParam(name = "displayName") String displayName, @RequestParam(name = "password") String password) {
+    public String addMember(@RequestParam(name = "username") String username
+                          , @RequestParam(name = "displayName") String displayName
+                          , @RequestParam(name = "password") String password) {
         String hashPassword = passwordEncoder.encode(password);
 
         Member member = new Member();

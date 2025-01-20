@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>상품 상세</title>
     <link href="/main.css" rel="stylesheet">
+    <link rel="icon" href="/icons8-spring-logo-16.png" type="image/png">
 </head>
 <body>
     <div th:replace="~{nav.html::navbar}"></div>
@@ -15,10 +16,17 @@
         <p th:text="${item.price + '원'}">item.price</p>
     </div>
 
+    <form action="/order" method="POST">
+        <input type="hidden" name="itemId" th:value="${item.id}">
+        <input type="hidden" name="price" th:value="${item.price}">
+        <input type="number" name="quantity" placeholder="수량">
+        <button type="submit">주문</button>
+    </form>
+
     <form id="commentForm" action="/comment" method="POST">
         <input type="hidden" name="itemId" th:value="${item.id}">
-        <input type="text" name="comment" id="commentInput">
-        <button type="submit">댓글 작성</button>
+        <input type="text" name="comment" id="commentInput" placeholder="댓글을 입력해주세요">
+        <button type="submit">댓글</button>
     </form>
 
     <!-- 댓글 목록 -->

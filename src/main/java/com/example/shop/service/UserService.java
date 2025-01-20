@@ -35,6 +35,7 @@ public class UserService implements UserDetailsService {
 //        User user = new User(member.getUsername(), member.getPassword(), authority);
         CustomUser user = new CustomUser(member.getUsername(), member.getPassword(), authority);
         user.setDisplayName(member.getDisplayName());
+        user.setUserId(member.getId());
 
         return user;
     }
