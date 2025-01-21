@@ -13,4 +13,9 @@ public class BasicController {
         return "index.html";
     }
 
+    @GetMapping("/payment")
+    public String payment() {
+        return "payment.html";
+    }
+
 }

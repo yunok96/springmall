@@ -4,12 +4,15 @@ import com.example.shop.entity.Member;
 import com.example.shop.repository.MemberRepository;
 import com.example.shop.CustomUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -17,9 +20,22 @@ public class MemberController {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     @GetMapping("/login")
     public String login() {
+        return "login.html";
+    }
+
+    @PostMapping("/login/jwt")
+    @ResponseBody
+    public String loginJWT(@RequestParam Map<String, String> data){
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                data.get("username"), data.get("password")
+        );
+        Authentication auth = authenticationManager.authenticate(authToken);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
         return "login.html";
     }
 
