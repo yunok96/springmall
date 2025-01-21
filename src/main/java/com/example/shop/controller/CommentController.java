@@ -1,8 +1,7 @@
 package com.example.shop.controller;
 
 import com.example.shop.CustomUser;
-import com.example.shop.entity.ItemComment;
-import com.example.shop.repository.ItemCommentRepository;
+import com.example.shop.model.entity.ItemComment;
 import com.example.shop.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

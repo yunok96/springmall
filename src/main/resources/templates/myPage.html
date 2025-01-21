@@ -11,13 +11,14 @@
 
     <h4>마이페이지</h4>
 
-    <span sec:authentication="principal"></span>
-    <span sec:authentication="principal.username"></span>
-    <span sec:authentication="principal.authorities"></span>
-    <span sec:authorize="hasAuthority('일반 유저')">특정권한이 있으면 보여주쇼</span>
-    <div sec:authorize="isAuthenticated()">
-        로그인된 사람만 보여주쇼
+    <div>
+        사용자 정보 : <span sec:authentication="principal"></span>
     </div>
-
+    <div>
+        사용자명 : <span sec:authentication="principal.username"></span>
+    </div>
+    <div>
+        사용자 권한 : <span sec:authentication="principal.authorities"></span>
+    </div>
 </body>
 </html>

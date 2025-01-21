@@ -1,9 +1,7 @@
 package com.example.shop.controller;
 
 import com.example.shop.CustomUser;
-import com.example.shop.entity.Item;
-import com.example.shop.entity.ItemComment;
-import com.example.shop.service.CommentService;
+import com.example.shop.model.entity.Item;
 import com.example.shop.service.ItemService;
 import com.example.shop.service.S3Service;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @Controller

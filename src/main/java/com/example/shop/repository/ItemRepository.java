@@ -1,10 +1,9 @@
 package com.example.shop.repository;
 
-import com.example.shop.entity.Item;
+import com.example.shop.model.entity.Item;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 public interface ItemRepository extends JpaRepository<Item, Integer> {
 

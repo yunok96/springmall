@@ -1,14 +1,18 @@
-package com.example.shop.entity;
+package com.example.shop.model.entity;
 
+import com.example.shop.model.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
-@ToString
 @Getter
 @Setter
+@ToString(exclude = "password")
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,4 +26,12 @@ public class Member {
 
     @Column(nullable = false)
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createDate;
 }

@@ -1,8 +1,10 @@
 package com.example.shop.controller;
 
-import com.example.shop.entity.Member;
+import com.example.shop.model.Role;
+import com.example.shop.model.entity.Member;
 import com.example.shop.repository.MemberRepository;
 import com.example.shop.CustomUser;
+import com.example.shop.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MemberService memberService;
 
     @GetMapping("/login")
     public String login() {
@@ -31,26 +33,19 @@ public class MemberController {
     @PostMapping("/addMember")
     public String addMember(@RequestParam(name = "username") String username
                           , @RequestParam(name = "displayName") String displayName
-                          , @RequestParam(name = "password") String password) {
+                          , @RequestParam(name = "password") String password
+                          , @RequestParam(name = "role") String role) {
+        Role userRole = Role.valueOf(role);
+
         String hashPassword = passwordEncoder.encode(password);
 
-        Member member = new Member();
-        member.setUsername(username);
-        member.setPassword(hashPassword);
-        member.setDisplayName(displayName);
-
-        memberRepository.save(member);
+        memberService.addMember(username, displayName, hashPassword, userRole);
 
         return "redirect:/list";
     }
 
     @GetMapping("/myPage")
     public String myPage(Authentication auth) {
-        CustomUser user = (CustomUser) auth.getPrincipal();
-
-        System.out.println(user.getDisplayName());
-
-
         if( auth == null ) {
             return "redirect:/login";
         }

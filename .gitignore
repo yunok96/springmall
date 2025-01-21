@@ -38,3 +38,4 @@ out/
 
 ### 시크릿키 정보 있어서 제외함 ###
 src/main/resources/application.properties
+src/main/resources/application-test.properties

@@ -1,7 +1,6 @@
 package com.example.shop.repository;
 
-import com.example.shop.entity.Item;
-import com.example.shop.entity.ItemComment;
+import com.example.shop.model.entity.ItemComment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

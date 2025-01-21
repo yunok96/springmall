@@ -1,7 +1,7 @@
 package com.example.shop.service;
 
 import com.example.shop.CustomUser;
-import com.example.shop.entity.Member;
+import com.example.shop.model.entity.Member;
 import com.example.shop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,11 +29,10 @@ public class UserService implements UserDetailsService {
         }
 
         Member member = result.get();
-        List<GrantedAuthority> authority = new ArrayList<>();
-        authority.add(new SimpleGrantedAuthority("일반 사용자"));
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(member.getRole().name())); // Role을 기반으로 권한을 설정
 
-//        User user = new User(member.getUsername(), member.getPassword(), authority);
-        CustomUser user = new CustomUser(member.getUsername(), member.getPassword(), authority);
+        CustomUser user = new CustomUser(member.getUsername(), member.getPassword(), authorities);
         user.setDisplayName(member.getDisplayName());
         user.setUserId(member.getId());
 

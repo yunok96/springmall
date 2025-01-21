@@ -1,13 +1,11 @@
 package com.example.shop.service;
 
-import com.example.shop.entity.Item;
+import com.example.shop.model.entity.Item;
 import com.example.shop.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 

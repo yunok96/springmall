@@ -1,6 +1,6 @@
 package com.example.shop.service;
 
-import com.example.shop.entity.ItemOrder;
+import com.example.shop.model.entity.ItemOrder;
 import com.example.shop.repository.ItemOrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

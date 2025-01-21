@@ -1,14 +1,11 @@
 package com.example.shop.service;
 
-import com.example.shop.entity.Item;
-import com.example.shop.entity.ItemComment;
+import com.example.shop.model.entity.ItemComment;
 import com.example.shop.repository.ItemCommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
