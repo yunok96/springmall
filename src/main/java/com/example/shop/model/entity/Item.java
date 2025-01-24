@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @ToString
@@ -29,4 +32,7 @@ public class Item {
     @ManyToOne
     @JoinColumn(name = "writer_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Member writer;
+
+    @CreationTimestamp
+    private LocalDateTime createdDate;
 }

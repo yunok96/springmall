@@ -21,7 +21,7 @@ public class ItemOrder {
             foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT)
     )
     private Item item;
-    private double price;
+    private double totalPrice;
     private int quantity;
     @ManyToOne
     @JoinColumn(
@@ -29,6 +29,10 @@ public class ItemOrder {
           , foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT)
     )
     private Member member;
+
+    private String paypalOrderId;
+    private String paypalPayerId;
+
     @CreationTimestamp
     private LocalDateTime orderDate;
 

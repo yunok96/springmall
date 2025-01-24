@@ -1,58 +1,136 @@
-.card {
- margin : 30px auto;
- display : flex;
-}
-.card img {
- width : 150px;
- margin-right : 20px;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;800&display=swap');
+
+/* Global Styles */
+body {
+ font-family: 'Montserrat', sans-serif;
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ background-color: #f4f4f4;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;800&display=swap');
+a {
+ text-decoration: none;
+ color: inherit;
+}
+
+/* Navbar */
 .nav {
  display: flex;
- padding: 10px;
+ padding: 10px 20px;
  align-items: center;
- font-family : 'Montserrat';
+ background-color: #333;
+ color: #fff;
 }
+
 .nav a {
- margin-right: 10px;
- text-decoration : none;
- font-weight : 400;
- letter-spacing : -0.5px;
+ margin-right: 20px;
+ font-weight: 400;
+ letter-spacing: -0.5px;
 }
+
 .nav .logo {
- font-weight : 800;
+ font-weight: 800;
 }
 
-input, button {
- padding : 8px 13px;
- margin-top : 5px;
- border : 1px solid grey;
- border-radius : 4px;
- vertical-align : middle;
-}
-button {
- background : black;
- color : white;
- border : none;
-}
-input {
- display : block;
+/* Card */
+.card {
+ display: flex;
+ margin: 30px auto;
+ padding: 20px;
+ background-color: white;
+ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+ border-radius: 8px;
+ max-width: 800px;
+ justify-content: space-between;
 }
 
-.detail {
-  text-align : center;
-}
-.detail img{
-  max-width : 30%;
-  display : block;
-  margin : auto;
+.card img {
+ width: 150px;
+ margin-right: 20px;
+ border-radius: 8px;
 }
 
+.card div {
+ flex: 1;
+}
+
+.card h4 {
+ font-size: 1.2em;
+ font-weight: 600;
+ margin-bottom: 10px;
+}
+
+.card p {
+ font-size: 1em;
+ color: #555;
+}
+
+.card a {
+ display: inline-block;
+ padding: 6px 12px;  /* 버튼 크기 조정 */
+ margin-right: 10px; /* 버튼 사이 간격 */
+ font-size: 14px;    /* 글자 크기 조정 */
+ text-decoration: none;
+ color: #fff;
+ background-color: #007bff; /* 파란색 배경 */
+ border-radius: 4px; /* 둥근 모서리 */
+ transition: background-color 0.3s;
+ text-align: center;  /* 텍스트 중앙 정렬 */
+}
+
+.card a:hover {
+ background-color: #0056b3;
+}
+
+.card .delete-btn {
+ cursor: pointer;
+ color: red;
+ font-size: 1.2em;
+ margin-left: 15px;
+}
+
+/* Search */
+form {
+ display: flex;
+ justify-content: center;
+ margin: 20px;
+}
+
+form input {
+ padding: 8px 15px;
+ font-size: 1em;
+ border-radius: 4px;
+ border: 1px solid #ccc;
+}
+
+form button {
+ padding: 8px 15px;
+ font-size: 1em;
+ background-color: #333;
+ color: white;
+ border: none;
+ border-radius: 4px;
+ margin-left: 10px;
+ cursor: pointer;
+}
+
+form button:hover {
+ background-color: #555;
+}
+
+/* No Results */
+.no-results {
+ text-align: center;
+ font-size: 1.2em;
+ color: #888;
+}
+
+/* Pagination */
 .pagination-container {
  display: flex;
  justify-content: center;
- margin-top: 20px;
+ margin-top: 30px;
 }
 
 .pagination {
@@ -96,3 +174,56 @@ input {
  background-color: #e9ecef;
  border-color: #007bff;
 }
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+ .card {
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+ }
+
+ .card img {
+  width: 100px;
+  margin-bottom: 20px;
+ }
+
+ .card div {
+  text-align: center;
+ }
+
+ .pagination-container {
+  margin-top: 20px;
+ }
+
+ .pagination li a {
+  padding: 6px 10px;
+ }
+}
+
+/* Account Info (for product details page) */
+.account-info {
+ display: none;
+ margin-top: 10px;
+ padding: 10px;
+ background-color: #f4f4f4;
+ border-radius: 5px;
+}
+
+.toggle-button {
+ cursor: pointer;
+ color: #0066cc;
+ text-decoration: underline;
+}
+
+.clickable {
+ cursor: pointer;
+ color: #0066cc;
+ text-decoration: underline;
+}
+
+.copy-success {
+ color: green;
+ font-size: 12px;
+}
+

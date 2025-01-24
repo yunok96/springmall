@@ -11,6 +11,10 @@
 
     <h4>마이페이지</h4>
 
+    <div sec:authorize="hasRole('BUSINESS_USER')">
+        <a href="/getOrderBySeller">판매자 상품 주문 조회</a>
+    </div>
+
     <div>
         사용자 정보 : <span sec:authentication="principal"></span>
     </div>

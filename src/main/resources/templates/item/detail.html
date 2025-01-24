@@ -5,6 +5,7 @@
     <title>상품 상세</title>
     <link href="/css/main.css" rel="stylesheet">
     <link rel="icon" href="/image/icons8-spring-logo-16.png" type="image/png">
+    <script src="https://www.paypal.com/sdk/js?client-id=AdJFZ1TCcMVds3gMfIFdXCLd-vhGiEs8eAalMa4FvsHr1Q7ISWPb-7tVQ-GQaz6-EELzM7T0Up93Sp1E"></script>
 </head>
 <body>
     <div th:replace="~{common/nav.html::navbar}"></div>
@@ -20,7 +21,22 @@
         <input type="hidden" name="itemId" th:value="${item.id}">
         <input type="hidden" name="price" th:value="${item.price}">
         <input type="number" name="quantity" placeholder="수량">
-        <button type="submit">주문</button>
+
+        <!-- 접기/펴기 버튼 -->
+        <span class="toggle-button" onclick="toggleAccountInfo()">[ 페이팔 샌드박스 계정 정보 보기 ]</span>
+        <!-- 페이팔 계정 정보 -->
+        <div class="account-info">
+            <div>
+                <span class="clickable" onclick="copyToClipboard('sb-twqgz37063904@personal.example.com')">계정 : sb-twqgz37063904@personal.example.com</span>
+                <span id="account-copy-msg" class="copy-success"></span>
+            </div>
+            <div>
+                <span class="clickable" onclick="copyToClipboard('zeH3&lt;AU1')">비밀번호 : zeH3&lt;AU1</span>
+                <span id="password-copy-msg" class="copy-success"></span>
+            </div>
+        </div>
+
+        <div id="paypal-button-container"></div>
     </form>
 
     <form id="commentForm" action="/postComment" method="POST">
@@ -121,6 +137,84 @@
 
         // Initial fetch
         fetchComments();
+
+        // PayPal 버튼 생성 및 결제 처리
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                const price = document.querySelector('input[name="price"]').value;
+                const quantity = document.querySelector('input[name="quantity"]').value;
+                const totalPrice = price * quantity;  // 결제 총액 계산
+
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: totalPrice.toFixed(2)  // 결제 금액
+                        },
+                        description: '상품 결제'  // 상품 설명
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    alert('결제가 완료되었습니다. 감사합니다, ' + details.payer.name.given_name + '!');
+
+                    // 서버로 결제 완료 정보 전송
+                    fetch('/processPayment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            orderId: data.orderID,
+                            payerId: details.payer.payer_id,
+                            amount: details.purchase_units[0].amount.value,
+
+                            itemId: document.querySelector('input[name="itemId"]').value,
+                            quantity: document.querySelector('input[name="quantity"]').value,
+                        })
+                    }).then(response => {
+                        if (response.ok) {
+                            window.location.href = '/orderSuccess';  // 결제 완료 후 리다이렉트
+                        } else {
+                            alert('서버 처리 실패');
+                        }
+                    }).catch(err => {
+                        console.error('서버 요청 실패:', err);
+                    });
+                });
+            },
+            onError: function(err) {
+                console.error(err);
+            }
+        }).render('#paypal-button-container');
+
+        // 계정 정보 숨기기/보이기 기능
+        function toggleAccountInfo() {
+            const accountInfo = document.querySelector('.account-info');
+            const isVisible = accountInfo.style.display === 'block';
+
+            // 계정 정보를 보이거나 숨기기
+            accountInfo.style.display = isVisible ? 'none' : 'block';
+
+            // 버튼 텍스트 변경
+            const toggleButton = document.querySelector('.toggle-button');
+            toggleButton.textContent = isVisible ? '[ 페이팔 샌드박스 계정 정보 보기 ]' : '[ 페이팔 샌드박스 계정 정보 숨기기 ]';
+        }
+
+        // 클립보드에 텍스트 복사
+        function copyToClipboard(text) {
+            // 클립보드에 텍스트 복사
+            navigator.clipboard.writeText(text).then(function() {
+                // 복사 성공 시 메시지 표시
+                const msgElement = text.includes('@') ? document.getElementById('account-copy-msg') : document.getElementById('password-copy-msg');
+                msgElement.textContent = '복사됨!';
+                setTimeout(function() {
+                    msgElement.textContent = '';  // 메시지 2초 후 사라짐
+                }, 2000);
+            }).catch(function(err) {
+                console.error('클립보드 복사 실패:', err);
+            });
+        }
     </script>
 </body>
 </html>

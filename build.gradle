@@ -36,6 +36,8 @@ dependencies {
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 	runtimeOnly 'com.h2database:h2'
 
+	implementation 'com.paypal.sdk:checkout-sdk:1.0.2'
+	implementation 'com.paypal.sdk:rest-api-sdk:1.14.0'
 }
 
 tasks.named('test') {
