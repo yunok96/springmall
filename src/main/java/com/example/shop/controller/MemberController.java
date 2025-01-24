@@ -19,12 +19,12 @@ public class MemberController {
 
     @GetMapping("/login")
     public String login() {
-        return "login.html";
+        return "member/login";
     }
 
     @GetMapping("/register")
     public String register() {
-        return "register.html";
+        return "member/register";
     }
 
     @PostMapping("/addMember")
@@ -46,7 +46,7 @@ public class MemberController {
         if( auth == null ) {
             return "redirect:/login";
         }
-        return "myPage.html";
+        return "member/myPage";
     }
 
 }

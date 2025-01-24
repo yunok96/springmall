@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>로그인</title>
-    <link href="/main.css" rel="stylesheet">
-    <link rel="icon" href="/icons8-spring-logo-16.png" type="image/png">
+    <link href="/css/main.css" rel="stylesheet">
+    <link rel="icon" href="/image/icons8-spring-logo-16.png" type="image/png">
 </head>
 <body>
-    <div th:replace="~{nav.html::navbar}"></div>
+    <div th:replace="~{common/nav.html::navbar}"></div>
 
     <div th:if="${param.error}">
         <h4>로그인에 실패하였습니다.</h4>
