@@ -1,9 +1,6 @@
 package com.example.shop.controller;
 
 import com.example.shop.model.Role;
-import com.example.shop.model.entity.Member;
-import com.example.shop.repository.MemberRepository;
-import com.example.shop.CustomUser;
 import com.example.shop.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

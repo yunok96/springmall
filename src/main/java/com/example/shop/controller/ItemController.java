@@ -1,6 +1,6 @@
 package com.example.shop.controller;
 
-import com.example.shop.CustomUser;
+import com.example.shop.model.CustomUser;
 import com.example.shop.model.entity.Item;
 import com.example.shop.service.ItemService;
 import com.example.shop.service.S3Service;
@@ -104,8 +104,11 @@ public class ItemController {
     }
 
     @PostMapping("/editing")
-    public String editItem(@RequestParam(name = "id") int id, @RequestParam(name = "name") String name, @RequestParam(name = "price") double price) {
-        itemService.editItem(id, name, price);
+    public String editItem(@RequestParam(name = "id") int id
+                         , @RequestParam(name = "name") String name
+                         , @RequestParam(name = "fileURL") String fileURL
+                         , @RequestParam(name = "price") double price) {
+        itemService.editItem(id, name, fileURL, price);
         return "redirect:/list";
     }
 

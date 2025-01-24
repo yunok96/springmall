@@ -1,4 +1,4 @@
-package com.example.shop;
+package com.example.shop.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

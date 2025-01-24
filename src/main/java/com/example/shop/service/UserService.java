@@ -1,6 +1,6 @@
 package com.example.shop.service;
 
-import com.example.shop.CustomUser;
+import com.example.shop.model.CustomUser;
 import com.example.shop.model.entity.Member;
 import com.example.shop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

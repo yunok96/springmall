@@ -16,14 +16,14 @@
         <p th:text="${item.price + '원'}">item.price</p>
     </div>
 
-    <form action="/order" method="POST">
+    <form action="/postOrder" method="POST">
         <input type="hidden" name="itemId" th:value="${item.id}">
         <input type="hidden" name="price" th:value="${item.price}">
         <input type="number" name="quantity" placeholder="수량">
         <button type="submit">주문</button>
     </form>
 
-    <form id="commentForm" action="/comment" method="POST">
+    <form id="commentForm" action="/postComment" method="POST">
         <input type="hidden" name="itemId" th:value="${item.id}">
         <input type="text" name="comment" id="commentInput" placeholder="댓글을 입력해주세요">
         <button type="submit">댓글</button>
@@ -50,7 +50,7 @@
         // Fetch and render comments
         async function fetchComments(page = 0, size = 10) {
             try {
-                const response = await fetch(`/comment/${itemId}?page=${page}&size=${size}`);
+                const response = await fetch(`/getComment/${itemId}?page=${page}&size=${size}`);
                 const data = await response.json();
 
                 // Clear existing comments

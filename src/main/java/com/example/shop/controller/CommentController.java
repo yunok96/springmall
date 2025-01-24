@@ -1,6 +1,6 @@
 package com.example.shop.controller;
 
-import com.example.shop.CustomUser;
+import com.example.shop.model.CustomUser;
 import com.example.shop.model.entity.ItemComment;
 import com.example.shop.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @GetMapping("/comment/{itemId}")
+    @GetMapping("/getComment/{itemId}")
     public ResponseEntity<?> getComments(@PathVariable("itemId") int itemId
                                        , @RequestParam(defaultValue = "0") int page
                                        , @RequestParam(defaultValue = "10") int size) {
@@ -28,7 +28,7 @@ public class CommentController {
         return ResponseEntity.ok(comments);
     }
 
-    @PostMapping("/comment")
+    @PostMapping("/postComment")
     @PreAuthorize("isAuthenticated()")
     String postComment(@RequestParam("itemId") int itemId, @RequestParam("comment") String comment, Authentication auth) {
         CustomUser user = (CustomUser) auth.getPrincipal();
