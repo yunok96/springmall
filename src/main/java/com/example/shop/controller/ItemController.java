@@ -1,5 +1,6 @@
 package com.example.shop.controller;
 
+import com.example.shop.exception.ItemNotFoundException;
 import com.example.shop.model.CustomUser;
 import com.example.shop.model.entity.Item;
 import com.example.shop.service.ItemService;
@@ -20,7 +21,7 @@ public class ItemController {
 
     private final ItemService itemService;
     private final S3Service s3Service;
-//    private final CommentService commentService;
+
     private static final int pageSize = 5; // 한 페이지에 표시할 항목 수
 
     @GetMapping("/list")
@@ -33,7 +34,7 @@ public class ItemController {
         model.addAttribute("totalPages", result.getTotalPages()); // 전체 페이지 수
         model.addAttribute("isEmpty", result.isEmpty()); // 결과가 없는지 확인
 
-        return "list.html"; // list.html 렌더링
+        return "item/list"; // list 렌더링
     }
 
     @GetMapping("/search")
@@ -48,12 +49,12 @@ public class ItemController {
         model.addAttribute("isEmpty", result.isEmpty()); // 결과가 없는지 확인
         model.addAttribute("keyword", keyword); // 검색어를 모델에 추가
 
-        return "search.html";
+        return "item/search";
     }
 
     @GetMapping("/write")
     public String write() {
-        return "write.html";
+        return "item/write";
     }
 
     @PostMapping("/save")
@@ -75,32 +76,18 @@ public class ItemController {
 
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable("id") int id, Model model) {
-        try { // 상품 상세 정보 조회
-            Optional<Item> result = itemService.getItem(id);
-            if ( result.isPresent() ) {
-                model.addAttribute("item", result.get());
-            } else {
-                System.out.println("Item not found");
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return "detail.html";
+        Item item = itemService.getItem(id);
+        model.addAttribute("item", item);
+
+        return "item/detail";
     }
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") int id, Model model) {
-        try{
-            Optional<Item> result = itemService.getItem(id);
-            if ( result.isPresent() ) {
-                model.addAttribute("item", result.get());
-            } else {
-                System.out.println("Item not found");
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return "edit.html";
+        Item item = itemService.getItem(id);
+        model.addAttribute("item", item);
+
+        return "item/edit";
     }
 
     @PostMapping("/editing")
@@ -115,16 +102,10 @@ public class ItemController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteItem(@PathVariable(name = "id") int id) {
         try {
-            boolean isDeleted = itemService.deleteItemById(id);
-            if (isDeleted) {
-                return ResponseEntity.status(200).body("Item deleted successfully.");
-            } else {
-                return ResponseEntity.status(404).body("Item not found.");
-            }
-        } catch (Exception e) {
-            // 예외 처리 및 로그 출력
-            e.printStackTrace();
-            return ResponseEntity.status(500).body("An error occurred while deleting the item.");
+            itemService.deleteItemById(id);
+            return ResponseEntity.status(200).body("Item deleted successfully.");
+        } catch (ItemNotFoundException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
         }
     }
 

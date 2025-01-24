@@ -1,5 +1,6 @@
 package com.example.shop.service;
 
+import com.example.shop.exception.ItemNotFoundException;
 import com.example.shop.model.entity.Item;
 import com.example.shop.model.entity.Member;
 import com.example.shop.repository.ItemRepository;
@@ -26,16 +27,17 @@ public class ItemService {
         return itemRepository.findByNameContaining(title, PageRequest.of(page, pageSize));
     }
 
-    public Optional<Item> getItem(int id) {
-        return itemRepository.findById(id);
+    public Item getItem(int id) {
+        return itemRepository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundException("Item not found with id: " + id));
     }
 
-    public boolean deleteItemById(int id) {
+    public void deleteItemById(int id) {
         if (itemRepository.existsById(id)) {
             itemRepository.deleteById(id);
-            return true; // 삭제 성공
+        } else {
+            throw new ItemNotFoundException("Item not found with id: " + id);
         }
-        return false; // 삭제할 아이템 없음
     }
 
     public void addItem(String name, double price, String fileURL, String username) {
